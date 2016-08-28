@@ -1,9 +1,15 @@
 import React, { Component, PropTypes } from 'react';
-import { requireNativeComponent, NativeAppEventEmitter } from 'react-native';
+import {
+  Platform,
+  requireNativeComponent,
+  NativeAppEventEmitter,
+  View,
+  Text,
+} from 'react-native';
 
 class CardIOView extends Component {
   displayName = 'CardIOView';
-  
+
   statics = {
     cardImageAndNumber: 'cardImageAndNumber',
     cardImageOnly: 'cardImageOnly',
@@ -13,7 +19,7 @@ class CardIOView extends Component {
   defaultProps = {
     didScanCard: () => {},
   };
-  
+
   componentWillMount() {
     this._listener = NativeAppEventEmitter.addListener('didScanCard', this.props.didScanCard);
   }
@@ -51,6 +57,18 @@ CardIOView.propTypes = {
     hidden: PropTypes.bool,
 };
 
-const RCTCardIOView = requireNativeComponent('RCTCardIOView', CardIOView);
+class RCTCardIOViewAndroid extends Component {
+  render() {
+    return (
+      <View>
+      <Text>RCTCardIOViewAndroid stub</Text>
+      </View>
+    );
+  }
+}
+
+const RCTCardIOView = Platform.OS === 'ios'
+  ? requireNativeComponent('RCTCardIOView', CardIOView)
+  : RCTCardIOViewAndroid;
 
 export default CardIOView;
